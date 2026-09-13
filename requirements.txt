@@ -5,3 +5,5 @@ seaborn
 scikit-learn
 jupyter
 notebook
+xgboost
+joblib
