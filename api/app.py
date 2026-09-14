@@ -214,3 +214,29 @@ def predict_employee_attrition(employee: EmployeeData):
     # Apply encoding mappings to categorical columns
     for column, mapping in mappings.items():
         df[column] = df[column].astype(str).map(mapping)
+
+
+    
+    # Get the exact feature order used when the scaler was fitted
+    feature_order = scaler.feature_names_in_
+
+    # Arrange the input features in the same order as training
+    X = df[feature_order]
+
+ 
+    ## Scale features
+    # Logistic Regression was trained on scaled data
+
+    X_scaled = scaler.transform(X)
+
+
+    # Prediction
+    prediction = model.predict(X_scaled)[0]
+    probability = model.predict_proba(X_scaled)[0][1]
+
+
+    # Response
+    return {
+        "prediction": "Yes" if prediction == 1 else "No",
+        "attrition_probability": round(float(probability), 4)
+    }
