@@ -1,9 +1,21 @@
 from pathlib import Path
+from typing import Literal
 
 import joblib
 import pandas as pd
-from fastapi import FastAPI
-from pydantic import BaseModel
+# from fastapi import FastAPI
+# from pydantic import BaseModel
+
+from fastapi import FastAPI, Request
+from pydantic import BaseModel, Field
+
+# from fastapi import Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+# from pydantic import Field
+from sklearn.linear_model import LogisticRegression
+
 
 
 # Project paths
@@ -15,6 +27,15 @@ MODEL_DIR = BASE_DIR / "models"
 model = joblib.load(MODEL_DIR / "best_model.pkl")
 scaler = joblib.load(MODEL_DIR / "scaler.pkl")
 
+# Known model metrics from the training 
+MODEL_METRICS = {
+    "model_name": type(model).__name__,
+    "accuracy": 0.7415,
+    "precision": 0.3505,
+    "recall": 0.7234,
+    "f1_score": 0.4722,
+    "note": "Metrics computed on the held-out test set (20% split, stratified).",
+}
 
 # FastAPI application
 app = FastAPI(
@@ -23,40 +44,73 @@ app = FastAPI(
     version="1.0.0"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Input data model
 class EmployeeData(BaseModel):
-    Age: int
-    BusinessTravel: str
-    DailyRate: int
-    Department: str
-    DistanceFromHome: int
-    Education: int
-    EducationField: str
-    EnvironmentSatisfaction: int
-    Gender: str
-    HourlyRate: int
-    JobInvolvement: int
-    JobLevel: int
-    JobRole: str
-    JobSatisfaction: int
-    MaritalStatus: str
-    MonthlyIncome: float
-    MonthlyRate: int
-    NumCompaniesWorked: int
-    OverTime: str
-    PercentSalaryHike: int
-    PerformanceRating: int
-    RelationshipSatisfaction: int
-    StockOptionLevel: int
-    TotalWorkingYears: int
-    TrainingTimesLastYear: int
-    WorkLifeBalance: int
-    YearsAtCompany: int
-    YearsInCurrentRole: int
-    YearsSinceLastPromotion: int
-    YearsWithCurrManager: int
+    Age: int = Field(..., ge=18, le=60, description="Employee age")
+    BusinessTravel: Literal["Non-Travel", "Travel_Rarely", "Travel_Frequently"]
+    DailyRate: int = Field(..., ge=0)
+    Department: Literal["Sales", "Research & Development", "Human Resources"]
+    DistanceFromHome: int = Field(..., ge=0, le=100)
+    Education: int = Field(..., ge=1, le=5)
+    EducationField: Literal[
+        "Life Sciences", "Other", "Medical", "Marketing",
+        "Technical Degree", "Human Resources"
+    ]
+    EnvironmentSatisfaction: int = Field(..., ge=1, le=4)
+    Gender: Literal["Male", "Female"]
+    HourlyRate: int = Field(..., ge=0)
+    JobInvolvement: int = Field(..., ge=1, le=4)
+    JobLevel: int = Field(..., ge=1, le=5)
+    JobRole: Literal[
+        "Sales Executive", "Research Scientist", "Laboratory Technician",
+        "Manufacturing Director", "Healthcare Representative", "Manager",
+        "Sales Representative", "Research Director", "Human Resources"
+    ]
+    JobSatisfaction: int = Field(..., ge=1, le=4)
+    MaritalStatus: Literal["Single", "Married", "Divorced"]
+    MonthlyIncome: float = Field(..., ge=0)
+    MonthlyRate: int = Field(..., ge=0)
+    NumCompaniesWorked: int = Field(..., ge=0)
+    OverTime: Literal["Yes", "No"]
+    PercentSalaryHike: int = Field(..., ge=0, le=100)
+    PerformanceRating: int = Field(..., ge=1, le=4)
+    RelationshipSatisfaction: int = Field(..., ge=1, le=4)
+    StockOptionLevel: int = Field(..., ge=0, le=3)
+    TotalWorkingYears: int = Field(..., ge=0)
+    TrainingTimesLastYear: int = Field(..., ge=0)
+    WorkLifeBalance: int = Field(..., ge=1, le=4)
+    YearsAtCompany: int = Field(..., ge=0)
+    YearsInCurrentRole: int = Field(..., ge=0)
+    YearsSinceLastPromotion: int = Field(..., ge=0)
+    YearsWithCurrManager: int = Field(..., ge=0)
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = [
+        {"field": ".".join(str(x) for x in err["loc"][1:]), "message": err["msg"]}
+        for err in exc.errors()
+    ]
+    return JSONResponse(
+        status_code=422,
+        content={"error": "Invalid input data", "details": errors},
+    )
+
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"error": "Internal server error", "details": str(exc)},
+    )
 
 # Root endpoint
 @app.get("/")
@@ -65,6 +119,30 @@ def root():
         "message": "Employee Attrition Prediction API is running"
     }
 
+@app.get("/health")
+def health_check():
+    model_ready = model is not None and scaler is not None
+    return {
+        "status": "healthy" if model_ready else "unhealthy",
+        "model_loaded": model is not None,
+        "scaler_loaded": scaler is not None,
+    }
+
+
+@app.get("/model-info")
+def model_info():
+    return {
+        "model_type": MODEL_METRICS["model_name"],
+        "num_features": len(scaler.feature_names_in_),
+        "features": list(scaler.feature_names_in_),
+        "metrics": {
+            "accuracy": MODEL_METRICS["accuracy"],
+            "precision": MODEL_METRICS["precision"],
+            "recall": MODEL_METRICS["recall"],
+            "f1_score": MODEL_METRICS["f1_score"],
+        },
+        "note": MODEL_METRICS["note"],
+    }
 
 # Prediction endpoint
 @app.post("/predict")
@@ -227,8 +305,10 @@ def predict_employee_attrition(employee: EmployeeData):
     ## Scale features
     # Logistic Regression was trained on scaled data
 
-    X_scaled = scaler.transform(X)
-
+    if isinstance(model, LogisticRegression):
+        X_scaled = scaler.transform(X)
+    else:
+        X_scaled = X.values
 
     # Prediction
     prediction = model.predict(X_scaled)[0]
