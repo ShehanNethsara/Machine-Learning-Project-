@@ -103,6 +103,17 @@ function Navbar() {
                 </div>
             </div>
 
+
+            {/* Mobile Menu Button */}
+            <button
+                type="button"
+                aria-label="Toggle navigation menu"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:border-blue-300 hover:text-blue-600 md:hidden"
+                >
+                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+
         </div>
     </nav>
   );
