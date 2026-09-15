@@ -30,10 +30,10 @@ scaler = joblib.load(MODEL_DIR / "scaler.pkl")
 # Known model metrics from the training 
 MODEL_METRICS = {
     "model_name": type(model).__name__,
-    "accuracy": 0.7415,
-    "precision": 0.3505,
-    "recall": 0.7234,
-    "f1_score": 0.4722,
+    "accuracy": 0.8503,
+    "precision": 0.5385,
+    "recall": 0.4468,
+    "f1_score": 0.4884,
     "note": "Metrics computed on the held-out test set (20% split, stratified).",
 }
 
