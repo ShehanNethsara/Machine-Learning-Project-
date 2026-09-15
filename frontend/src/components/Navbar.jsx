@@ -84,8 +84,25 @@ function Navbar() {
                 })}
             </div>
 
-
             
+            {/* System Status */}
+            <div className='hidden items-cneter gap-3 sm:flex'>
+                <div className='flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-2'>
+                    <span className='relative flex h-2.5 w-2.5'>
+                        <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60' />
+                        <span className='relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500' />
+                    </span>
+
+                    <span className='text-xs font-bold text-emerald-700'>
+                        ML System Acyive
+                    </span>
+                </div>
+
+                <div className='flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 text-purple-600'>
+                    <Shield size={18} strokeWidth={2.2} />
+                </div>
+            </div>
+
         </div>
     </nav>
   );
