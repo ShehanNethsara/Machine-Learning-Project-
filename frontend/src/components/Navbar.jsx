@@ -48,6 +48,44 @@ function Navbar() {
                     </p>
                 </div>
             </a>
+
+
+            {/* Desktop Navigation */}
+            <div className="hidden items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1 md:flex">
+                {navigation.map((item) => {
+                    const Icon = item.icon
+                    const isActive = activeTab === item.label
+
+                    return (
+                        <a
+                            key={item.label}
+                            href={item.href}
+                            onClick={(e) => {
+                            e.preventDefault()
+                            setActiveTab(item.label)
+                            }}
+                            className={`group flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                            isActive
+                                ? 'bg-white text-blue-600 shadow-sm'
+                                : 'text-slate-600 hover:bg-white hover:text-blue-600 hover:shadow-sm'
+                            }`}
+                        >
+                            <Icon
+                                size={16}
+                                strokeWidth={2.2}
+                                className={`transition-colors ${
+                                    isActive ? 'text-blue-600' : 'group-hover:text-blue-600'
+                                }`}
+                            />
+
+                            {item.label}
+                        </a>
+                    )
+                })}
+            </div>
+
+
+            
         </div>
     </nav>
   );
