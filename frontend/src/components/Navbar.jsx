@@ -23,6 +23,35 @@ function Navbar() {
     },
   ];
 
+
+  return (
+    <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-xl">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+
+            {/* Brand */}
+            <a
+                href="#top"
+                className="flex items-center gap-3"
+                onClick={() => setIsMenuOpen(false)}
+            >
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-sm font-extrabold text-white shadow-lg shadow-blue-200">
+                HR
+                </div>
+
+                <div>
+                    <h1 className="text-base font-extrabold tracking-tight text-slate-950 sm:text-lg">
+                        HR Analytics
+                    </h1>
+
+                    <p className="hidden text-[11px] font-medium text-slate-500 sm:block">
+                        Intelligent Workforce Insights
+                    </p>
+                </div>
+            </a>
+        </div>
+    </nav>
+  );
+
   
 }
 
