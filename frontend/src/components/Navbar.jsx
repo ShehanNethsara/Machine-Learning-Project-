@@ -35,7 +35,7 @@ function Navbar() {
                 onClick={() => setIsMenuOpen(false)}
             >
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-sm font-extrabold text-white shadow-lg shadow-blue-200">
-                HR
+                    HR
                 </div>
 
                 <div>
@@ -61,8 +61,8 @@ function Navbar() {
                             key={item.label}
                             href={item.href}
                             onClick={(e) => {
-                            e.preventDefault()
-                            setActiveTab(item.label)
+                                e.preventDefault()
+                                setActiveTab(item.label)
                             }}
                             className={`group flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
                             isActive
@@ -114,11 +114,49 @@ function Navbar() {
                 {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
 
+            {/* Mobile Navigation */}
+            {isMenuOpen && (
+                <div className="border-t border-slate-200 bg-white px-6 py-4 md:hidden">
+                    <div className="space-y-2">
+                        {navigation.map((item) => {
+                            const Icon = item.icon
+                            const isActive = activeTab === item.label
+
+                            return (
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        setActiveTab(item.label)
+                                        setIsMenuOpen(false)
+                                    }}
+                                    className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition ${
+                                    isActive
+                                        ? 'bg-blue-50 text-blue-600'
+                                        : 'text-slate-700 hover:bg-blue-50 hover:text-blue-600'
+                                    }`}
+                                >
+                                    <Icon size={18} />
+                                    {item.label}
+                                </a>
+                            )
+                        })}
+                    </div>
+
+                    {/* Mobile Status */}
+                    <div className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                        <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+
+                        <span className="text-xs font-bold text-emerald-700">
+                            ML System Active
+                        </span>
+                    </div>
+                </div>
+            )}
         </div>
     </nav>
   );
-
-  
 }
 
 export default Navbar
