@@ -61,9 +61,10 @@ function Navbar() {
                             key={item.label}
                             href={item.href}
                             onClick={(e) => {
-                                e.preventDefault()
-                                setActiveTab(item.label)
-                            }}
+                            e.preventDefault()
+                            setActiveTab(item.label)
+                            document.getElementById(item.href.slice(1))?.scrollIntoView({ behavior: 'smooth' })
+                        }}
                             className={`group flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
                             isActive
                                 ? 'bg-white text-blue-600 shadow-sm'
@@ -127,10 +128,11 @@ function Navbar() {
                                     key={item.label}
                                     href={item.href}
                                     onClick={(e) => {
-                                        e.preventDefault()
-                                        setActiveTab(item.label)
-                                        setIsMenuOpen(false)
-                                    }}
+                                    e.preventDefault()
+                                    setActiveTab(item.label)
+                                    setIsMenuOpen(false)
+                                    document.getElementById(item.href.slice(1))?.scrollIntoView({ behavior: 'smooth' })
+                                }}
                                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition ${
                                     isActive
                                         ? 'bg-blue-50 text-blue-600'
