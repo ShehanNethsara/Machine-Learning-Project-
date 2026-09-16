@@ -3,7 +3,7 @@ import Hero from './components/Hero'
 import DashboardStats from './components/DashboardStats'
 import PredictionSection from './components/PredictionSection'
 import PerformanceSection from './components/PerformanceSection'
-// import Footer from './components/Footer'
+import Footer from './components/Footer'
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <PredictionSection />
       <DashboardStats />
       <PerformanceSection />
-      
+       <Footer /> 
     </div>
   )
 }
