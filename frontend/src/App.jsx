@@ -1,6 +1,6 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-// import DashboardStats from './components/DashboardStats'
+import DashboardStats from './components/DashboardStats'
 import PredictionSection from './components/PredictionSection'
 // import PerformanceSection from './components/PerformanceSection'
 // import Footer from './components/Footer'
@@ -11,6 +11,7 @@ function App() {
       <Navbar />
       <Hero />
       <PredictionSection />
+      <DashboardStats />
       
     </div>
   )
