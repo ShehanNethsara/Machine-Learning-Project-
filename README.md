@@ -125,12 +125,28 @@ Machine-Learning-Project-/
 │   └── app.py                      # FastAPI application
 ├── data/
 │   └── WA_Fn-UseC_-HR-Employee-Attrition.csv
+├── frontend/                       # React + Vite + Tailwind UI
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Hero.jsx
+│   │   │   ├── PredictionSection.jsx
+│   │   │   ├── DashboardStats.jsx
+│   │   │   ├── PerformanceSection.jsx
+│   │   │   └── Footer.jsx
+│   │   ├── services/
+│   │   │   └── api.js              # Calls the FastAPI backend
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── package.json
 ├── models/
 │   ├── best_model.pkl              # Trained XGBoost model
 │   └── scaler.pkl                  # Fitted StandardScaler
 ├── notebooks/
 │   └── data_understanding.ipynb    # EDA, feature engineering, model training
+├── Dockerfile
 ├── requirements.txt
+├── sample_request.json
 └── README.md
 ```
 
@@ -181,6 +197,45 @@ uvicorn app:app --reload
 The API runs at `http://127.0.0.1:8000`.
 
 Interactive docs (Swagger UI) are available at `http://127.0.0.1:8000/docs`.
+
+### 6. Start the frontend
+
+In a separate terminal, from the project root:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The app runs at `http://localhost:5173`. The backend must already be running at `http://127.0.0.1:8000` — the frontend calls it directly and has no fallback if it's down.
+
+---
+
+## Frontend
+
+A single-page React app (Vite + Tailwind CSS) that gives the model a usable interface, built in `frontend/`.
+
+| Section | Component | What it does |
+|---|---|---|
+| Navigation | `Navbar.jsx` | Sticky nav with smooth-scroll links to each section, collapses to a mobile menu below `md` |
+| Hero | `Hero.jsx` | Introduces the tool and links straight to the prediction form |
+| Prediction | `PredictionSection.jsx` | Form covering all 30 model inputs; submits to `POST /predict` and shows the result as "High Attrition Risk" / "Low Attrition Risk" with the probability |
+| Live metrics | `DashboardStats.jsx` | Fetches `GET /model-info` on load and displays the model's real accuracy/precision/recall/F1 — not hardcoded, so it always matches whatever model is currently saved |
+| Model details | `PerformanceSection.jsx` | Summarises model comparison results and the engineered feature list |
+| Footer | `Footer.jsx` | Repo link and project credits |
+
+### Connecting to the backend
+
+All API calls go through `frontend/src/services/api.js`, which points at:
+
+```js
+const API_BASE_URL = "http://127.0.0.1:8000";
+```
+
+`predictAttrition()`, `getModelInfo()`, and `getHealth()` wrap the three `GET`/`POST` calls and surface backend error messages (including per-field validation errors from `/predict`) as thrown `Error`s that the components catch and display.
+
+If you deploy the API somewhere other than `localhost:8000`, update `API_BASE_URL` in `api.js` before building the frontend.
 
 ---
 
