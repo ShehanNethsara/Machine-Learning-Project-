@@ -97,20 +97,15 @@ Note that Logistic Regression has higher recall (0.723) — it catches more leav
 
 ## Architecture
 
-```
-User
- ↓
-Frontend Application
- ↓
-Backend REST API (FastAPI)
- ↓
-ML Prediction Service  ← feature engineering applied to raw input
- ↓
-Trained ML Model (XGBoost)
- ↓
-Prediction Result
- ↓
-Frontend
+```mermaid
+flowchart TD
+    U[User] --> FE[Frontend<br/>React + Vite + Tailwind]
+    FE -->|HTTP POST /predict| API[Backend REST API<br/>FastAPI]
+    API --> VAL[Pydantic Validation]
+    VAL --> FENG[ML Prediction Service<br/>Feature Engineering:<br/>binning · encoding · scaling]
+    FENG --> MODEL[Trained ML Model<br/>XGBoost]
+    MODEL --> RES[Prediction Result<br/>class + probability]
+    RES --> FE
 ```
 
 The API replicates the exact feature engineering steps from training — the same bin boundaries, the same encoding maps, the same clipping limits — so that inference matches training conditions.
