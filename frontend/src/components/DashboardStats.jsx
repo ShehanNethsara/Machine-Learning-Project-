@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { BarChart2, Target, Crosshair, Activity, Layers } from 'react-feather'
 import { getModelInfo } from '../services/api'
 
-function StatCard({ icon: Icon, label, value, accent }) {
+function StatCard({ icon: Icon, label, value }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div
-        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${accent}`}
-      >
+    <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
         <Icon size={20} strokeWidth={2.2} />
       </div>
       <div>
@@ -33,9 +31,9 @@ function DashboardStats() {
   }, [])
 
   return (
-    <section id="dashboard" className="mx-auto max-w-7xl px-6 pt-16 lg:px-8">
+    <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
       <div className="mb-10 flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-200">
+        <div className="brand-gradient flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-lg shadow-indigo-200">
           <BarChart2 size={20} strokeWidth={2.2} />
         </div>
         <div>
@@ -60,35 +58,26 @@ function DashboardStats() {
 
       {info && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          <StatCard
-            icon={Layers}
-            label="Model Type"
-            value={info.model_type}
-            accent="bg-blue-50 text-blue-600"
-          />
+          <StatCard icon={Layers} label="Model Type" value={info.model_type} />
           <StatCard
             icon={Target}
             label="Accuracy"
             value={`${(info.metrics.accuracy * 100).toFixed(1)}%`}
-            accent="bg-purple-50 text-purple-600"
           />
           <StatCard
             icon={Crosshair}
             label="Precision"
             value={`${(info.metrics.precision * 100).toFixed(1)}%`}
-            accent="bg-emerald-50 text-emerald-600"
           />
           <StatCard
             icon={Activity}
             label="Recall"
             value={`${(info.metrics.recall * 100).toFixed(1)}%`}
-            accent="bg-amber-50 text-amber-600"
           />
           <StatCard
             icon={BarChart2}
             label="F1 Score"
             value={`${(info.metrics.f1_score * 100).toFixed(1)}%`}
-            accent="bg-rose-50 text-rose-600"
           />
         </div>
       )}

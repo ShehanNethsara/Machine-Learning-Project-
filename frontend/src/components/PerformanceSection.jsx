@@ -33,9 +33,9 @@ function PerformanceSection() {
   }, [])
 
   return (
-    <section id="performance" className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+    <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
       <div className="mb-10 flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-200">
+        <div className="brand-gradient flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-lg shadow-indigo-200">
           <TrendingUp size={20} strokeWidth={2.2} />
         </div>
         <div>
@@ -66,10 +66,10 @@ function PerformanceSection() {
               Evaluation Metrics — {info.model_type}
             </h3>
             <div className="flex flex-col gap-5">
-              <MetricBar label="Accuracy" value={info.metrics.accuracy} color="bg-blue-500" />
-              <MetricBar label="Precision" value={info.metrics.precision} color="bg-purple-500" />
-              <MetricBar label="Recall" value={info.metrics.recall} color="bg-emerald-500" />
-              <MetricBar label="F1 Score" value={info.metrics.f1_score} color="bg-amber-500" />
+              <MetricBar label="Accuracy" value={info.metrics.accuracy} color="bg-indigo-600" />
+              <MetricBar label="Precision" value={info.metrics.precision} color="bg-indigo-500" />
+              <MetricBar label="Recall" value={info.metrics.recall} color="bg-violet-500" />
+              <MetricBar label="F1 Score" value={info.metrics.f1_score} color="bg-violet-400" />
             </div>
 
             <div className="mt-6 flex items-start gap-3 rounded-xl bg-slate-50 p-4">
