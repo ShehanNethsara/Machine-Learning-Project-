@@ -454,7 +454,7 @@ Open `http://127.0.0.1:8000/docs`, expand `POST /predict`, click **Try it out**,
 ## Team
 
 | Member |Student Id | Contribution |
-|---|---|
+|---|---|---|
 | Shehan Nethsara |241711008| Data understanding, EDA, feature engineering |
 | Yashodha Gunawardhana |241711077| Data preprocessing, encoding, train/test split, scaling |
 | Yehara Nessilu |241711103| Model training and evaluation, API prediction service |
