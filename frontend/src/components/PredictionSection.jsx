@@ -71,10 +71,10 @@ function PredictionSection() {
   }
 
   return (
-    <section id="prediction" className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+    <section className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
       {/* Section header */}
       <div className="mb-10 flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-200">
+        <div className="brand-gradient flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-lg shadow-indigo-200">
           <Cpu size={20} strokeWidth={2.2} />
         </div>
         <div>
@@ -106,7 +106,7 @@ function PredictionSection() {
                   id={field.name}
                   value={formData[field.name]}
                   onChange={(e) => handleChange(field.name, e.target.value, 'select')}
-                  className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-800 outline-none transition focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                  className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-800 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
                 >
                   {field.options.map((opt) => (
                     <option key={opt} value={opt}>
@@ -123,7 +123,7 @@ function PredictionSection() {
                   value={formData[field.name]}
                   onChange={(e) => handleChange(field.name, e.target.value, 'number')}
                   required
-                  className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-800 outline-none transition focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                  className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-800 outline-none transition focus:border-indigo-400 focus:bg-white focus:ring-2 focus:ring-indigo-100"
                 />
               )}
             </div>
@@ -133,7 +133,7 @@ function PredictionSection() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-200 transition hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
+          className="brand-gradient mt-8 flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? (
             <>
